@@ -13,8 +13,43 @@ https://nuget.org/packages/EntityFramework.SerializableProperty.Fody/
 
     PM> Install-Package EntityFramework.SerializableProperty.Fody
 
-## What it does 
+## Your code
+```csharp
+public class PurchaseOrder
+{
+    public Guid Id { get; set; }    
+    public decimal Amount { get; set; }
+    ...
+    [SerializableProperty(typeof(SimpleJsonSerializer))]
+    public List<Product> Products { get; set; }
+}
+```
+## What gets compiled
+```csharp
+public class PurchaseOrder
+{
+    public Guid Id { get; set; }    
+    public decimal Amount { get; set; }
+    ...
+    [SerializableProperty(typeof(SimpleJsonSerializer))]
+    public List<Product> Products { get; set; }
+    
+    [CompilerGenerated]
+    private string Products_serialized
+    {
+        get
+        {
+            return ((ISerializer)new SimpleJsonSerializer()).Serialize(this.Products);
+        }
+        set
+        {
+            this.Products = ((ISerializer)new SimpleJsonSerializer()).Deserialize<List<Product>>(value);
+        }
+    }
+}
+```
 
+## How to use
 TODO
 
 ## License
