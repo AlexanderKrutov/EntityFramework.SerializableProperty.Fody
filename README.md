@@ -17,23 +17,19 @@ https://nuget.org/packages/EntityFramework.SerializableProperty.Fody/
 ```csharp
 public class PurchaseOrder
 {
-    public Guid Id { get; set; }    
-    public decimal Amount { get; set; }
     ...
     [SerializableProperty(typeof(SimpleJsonSerializer))]
     public List<Product> Products { get; set; }
+    ...
 }
 ```
 ## What gets compiled
 ```csharp
 public class PurchaseOrder
 {
-    public Guid Id { get; set; }    
-    public decimal Amount { get; set; }
     ...
-    [SerializableProperty(typeof(SimpleJsonSerializer))]
     public List<Product> Products { get; set; }
-    
+    ...
     [CompilerGenerated]
     private string Products_serialized
     {
@@ -46,6 +42,7 @@ public class PurchaseOrder
             this.Products = ((ISerializer)new SimpleJsonSerializer()).Deserialize<List<Product>>(value);
         }
     }
+    ...
 }
 ```
 
